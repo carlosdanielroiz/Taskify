@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Content, Field, Form, RememberAndForgot } from './style'
+import { Button, Content, Field, Form } from './style'
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
@@ -8,16 +8,19 @@ import { ReactComponent as EyeIcon } from '../../assets/icons/eye.svg';
 import { ReactComponent as EyeSlashIcon } from '../../assets/icons/eye-slash.svg';
 import logo from "../../assets/images/logo.png"
 
-function Login() {
+function Register() {
 
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
+  const [confirmPassword, setConfirmPassword] = useState<string>("")
+  const [name, setName] = useState<string>("")
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
 
   const signIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    if (!password || !email) {
+    if (!password || !email || !name || !confirmPassword) {
       return
     }
   }
@@ -26,8 +29,8 @@ function Login() {
     <Content>
       <Form onSubmit={(event) => signIn(event)}>
         <img src={logo} alt="" />
-        <h1>Seja bem-vindo(a) de volta</h1>
-        <span>Por favor insira seus dados para realizar o login</span>
+        <h1>Seja bem-vindo(a)</h1>
+        <span>Por favor insira seus dados para realizar se registrar no site</span>
         <div className="social-media">
           <div className="op">
             <FaFacebook color='#29487d ' />
@@ -47,6 +50,14 @@ function Login() {
         </div>
 
         <Field  style={{ marginTop: "12px"}}>
+          <label htmlFor="name">Nome</label>
+          
+          <div className="input-and-icon">
+            <input type="text" id='name' name='name' placeholder='Nome' onChange={(event) => setName(event.target.value)} />
+          </div>
+        </Field>
+
+        <Field  style={{ marginTop: "12px"}}>
           <label htmlFor="email">E-mail</label>
           
           <div className="input-and-icon">
@@ -64,23 +75,24 @@ function Login() {
           </div>
         </Field>
 
-        <RememberAndForgot>
-          <div>
-            <input type="checkbox" name="remeber" id="remeber" />
-            <label htmlFor="remeber">Lembre-me</label>
+        <Field style={{ marginTop: "12px"}}>
+          <label htmlFor="confirm-password">Confirma senha</label>
+          
+          <div className="input-and-icon">
+            <input type={ showConfirmPassword ? "text" : "password"} id='confirm-password' name='confirm-password' placeholder='Confirmar senha' onChange={(event) => setConfirmPassword(event.target.value)} />
+            
+            { showConfirmPassword ? <EyeSlashIcon onClick={() => setShowConfirmPassword(false)} /> : <EyeIcon onClick={() => setShowConfirmPassword(true)} />}
           </div>
-
-          <a href="">Esqueci minha senha</a>
-        </RememberAndForgot>
+        </Field>
 
         <Button style={{ marginTop: "24px"}} type='submit' >
-          Entrar
+          Registrar
         </Button>
 
-        <span style={{ marginTop: "12px"}}>Não tem uma conta ainda? <a href="/registre">Registre-se</a></span>
+        <span style={{ marginTop: "12px"}}>Já possui uma conta? <a href="/login">Login</a></span>
       </Form>
     </Content>
   )
 }
 
-export default Login
+export default Register

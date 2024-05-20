@@ -163,34 +163,6 @@ export const Field = styled.div`
   }
 `;
 
-export const RememberAndForgot = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  
-  label{
-    font-size: 14px;
-    font-weight: 500;
-    color: ${theme.colors.black};
-    margin: 0;
-  }
-
-  div{
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  a{
-    font-size: 14px;
-    font-weight: 400;
-    color: ${theme.colors.black};
-    margin: 0;
-  }
-
-`;
-
 export const Button = styled.button`
   border: none;
   height: 40px;
