@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import { useContext, useEffect } from 'react'
 import { UserContext } from './context/UserContext'
 import Register from './pages/Register'
+import ForgotPassword from './pages/ForgotPassword'
 
 export function AppRoutes() {
 
@@ -13,7 +14,7 @@ export function AppRoutes() {
   const location = useLocation()
 
   useEffect(() => {
-    if ((location.pathname.startsWith("/login") || location.pathname.startsWith("/registre") && !user)){
+    if ((location.pathname.startsWith("/login") || location.pathname.startsWith("/registre") || location.pathname.startsWith("/esqueceu-a-senha") && !user)){
       navigate(location.pathname)
       
     } else if (!user) {
@@ -29,6 +30,7 @@ export function AppRoutes() {
       <Route path='/' element={<MainPage />} />
       <Route path='/login' element={<Login />} />
       <Route path='/registre' element={<Register />} />
+      <Route path='/esqueceu-a-senha' element={<ForgotPassword />} />
     </Routes>
   )
 }

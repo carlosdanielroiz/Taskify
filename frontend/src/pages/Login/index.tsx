@@ -70,7 +70,7 @@ function Login() {
             <label htmlFor="remeber">Lembre-me</label>
           </div>
 
-          <a href="">Esqueci minha senha</a>
+          <a href="/esqueceu-a-senha">Esqueci minha senha</a>
         </RememberAndForgot>
 
         <Button style={{ marginTop: "24px"}} type='submit' >
