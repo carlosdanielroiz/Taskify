@@ -24,7 +24,7 @@ export const Container = styled.div`
     font-size: 20px;
     margin: 0;
     font-weight: 200;
-    color: ${theme.colors.gray};
+    color: ${theme.colors.gray100};
     animation: ${Animation} 1500ms linear infinite;
     white-space: nowrap;
     padding: 0 16px;
@@ -57,7 +57,7 @@ export const Title = styled.h1`
   font-size: 48px;
   margin: 0;
   font-weight: 200;
-  color: ${theme.colors.gray};
+  color: ${theme.colors.gray100};
   animation-delay: 1200ms;
   margin-left: -4px;
   margin-bottom: 8px;
@@ -68,6 +68,6 @@ export const Text = styled.h2`
   font-size: 16px;
   margin: 0;
   font-weight: 400;
-  color: ${theme.colors.gray};
+  color: ${theme.colors.gray100};
   animation-delay: 1300ms;
 `;

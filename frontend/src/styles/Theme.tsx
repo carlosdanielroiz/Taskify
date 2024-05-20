@@ -5,8 +5,10 @@ import { DefaultTheme, ThemeProvider } from 'styled-components'
 export const theme: DefaultTheme = {
   colors: {
     white: '#F8F6FA',
-    black: '#0F0A0B',
-    gray: '#333333',
+    black: '#000000',
+    gray100: '#e0e1e4',
+    gray400: '#6a6c6f',
+    gray900: '#262728',
   },
 }
 
