@@ -8,8 +8,6 @@ Este projeto é um gerenciador de tarefas com uma abordagem diferenciada: você 
 ## Deploys
 --
 
----
-
 ## Índice
 
 1. [Tecnologias](#tecnologias)
@@ -39,7 +37,7 @@ Pretendo estudar
   <img alt="postgres" src="https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white" />
 </div>
 
-----
+
 
 ## Instalação
 
