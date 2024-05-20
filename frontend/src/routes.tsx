@@ -4,6 +4,7 @@ import MainPage from './pages/Main'
 import Login from './pages/Login'
 import { useContext, useEffect } from 'react'
 import { UserContext } from './context/UserContext'
+import Register from './pages/Register'
 
 export function AppRoutes() {
 
@@ -12,7 +13,7 @@ export function AppRoutes() {
   const location = useLocation()
 
   useEffect(() => {
-    if ((location.pathname.startsWith("/login") || location.pathname.startsWith("/register") && !user)){
+    if ((location.pathname.startsWith("/login") || location.pathname.startsWith("/registre") && !user)){
       navigate(location.pathname)
       
     } else if (!user) {
@@ -27,6 +28,7 @@ export function AppRoutes() {
     <Routes>
       <Route path='/' element={<MainPage />} />
       <Route path='/login' element={<Login />} />
+      <Route path='/registre' element={<Register />} />
     </Routes>
   )
 }
