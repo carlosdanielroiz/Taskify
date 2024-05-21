@@ -6,7 +6,7 @@ Este projeto é um gerenciador de tarefas com uma abordagem diferenciada: você 
 **<font color="#FFDB5C">Em desenvolvimento</font>**
 
 ## Deploys
---
+<a href="https://taskify-manager.vercel.app/" target="_blank">Website</a>
 
 ## Índice
 
