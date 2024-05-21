@@ -6,6 +6,10 @@ import { useContext, useEffect } from 'react'
 import { UserContext } from './context/UserContext'
 import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
+import Home from './pages/Main/Home'
+import Calendar from './pages/Main/Calendar'
+import Messages from './pages/Main/Messages'
+import Invitation from './pages/Main/Invitation'
 
 export function AppRoutes() {
 
@@ -27,10 +31,17 @@ export function AppRoutes() {
 
   return (
     <Routes>
-      <Route path='/' element={<MainPage />} />
       <Route path='/login' element={<Login />} />
       <Route path='/registre' element={<Register />} />
       <Route path='/esqueceu-a-senha' element={<ForgotPassword />} />
+
+      <Route path='/' element={<MainPage />}>
+        <Route path='/home' element={<Home />} />
+        <Route path='/calendario' element={<Calendar />} />
+        <Route path='/configuracoes' element={<Calendar />} />
+        <Route path='/mensagens' element={<Messages />} />
+        <Route path='/convites' element={<Invitation />} />
+      </Route>
     </Routes>
   )
 }

@@ -1,20 +1,19 @@
 import React, { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import { login } from "../services/api";
 
 export const UserContext = createContext();
 
 export function UserProvider({ children }) {
 
-  const [user, setUser] = useState()
+  const [user, setUser] = useState("a")
   const [loading, setLoading] = useState(false)
 
 
   const navigate = useNavigate();
 
   const logout = () => {
-    localStorage.removeItem("createroo-auth")
+    localStorage.removeItem("taskify-auth")
     setUser()
     navigate("/login")
   }
