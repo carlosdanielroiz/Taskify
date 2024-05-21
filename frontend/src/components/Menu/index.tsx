@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Container, Link, Logout } from './style'
 import logo from "../../assets/images/logo.png"
 import avatar from "../../assets/images/avatar.png"
@@ -10,8 +10,12 @@ import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 import { ReactComponent as MessagesIcon } from '../../assets/icons/messages.svg'
 import { ReactComponent as LogoutIcon } from '../../assets/icons/logout.svg'
 import { ReactComponent as SmsIcon } from '../../assets/icons/sms.svg'
+import { UserContext } from '../../context/UserContext'
 
 function Menu() {
+
+  const { logout } = useContext(UserContext)
+
   return (
     <Container>
       <div className="logo">
@@ -58,7 +62,7 @@ function Menu() {
           <ArrowIcon className='arrow' />
         </Link>
 
-        <Logout>
+        <Logout onClick={() => logout()}>
           <div className="active"></div>
           <LogoutIcon className='icon' />
           <span>Sair</span>
