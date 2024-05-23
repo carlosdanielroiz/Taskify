@@ -8,8 +8,12 @@ import { ReactComponent as EyeIcon } from '../../assets/icons/eye.svg';
 import { ReactComponent as EyeSlashIcon } from '../../assets/icons/eye-slash.svg';
 import { ReactComponent as ArrowIcon } from '../../assets/icons/arrow-left.svg';
 import logo from "../../assets/images/logo.png"
+import { useNavigate } from 'react-router-dom';
+import { CodeConfirmation, confirmCode, createUser } from '../../services/api';
 
 function Register() {
+
+  const navigate = useNavigate()
 
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
@@ -20,12 +24,146 @@ function Register() {
   const [code, setCode] = useState<string>("")
   const [hash, setHash] = useState<string>("")
 
-  const signIn = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const [info, setInfo] = useState<string>("⠀")
+  const [loading, setLoading] = useState<boolean>(false)
+  const [loadingResendCode, setLoadingResendCode] = useState<boolean>(false)
 
-    if (!password || !email || !name || !confirmPassword) {
+
+  const signIn = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    
+    if(loading) {
       return
     }
+
+    if (!name || !email || !password || !confirmPassword) {
+      setInfo("Preencha todos os campos")
+      return
+    } 
+
+
+    if (password !== confirmPassword) {
+      setInfo("As senhas não combinam")
+      return
+    }
+
+     if (password.includes(" ")){
+      setInfo("A senha não pode conter espaço")
+      return
+     }
+
+     if (password.length < 8){
+      setInfo("Mínimo de 8 caracters")
+      return
+     }
+
+    setInfo("⠀")
+
+    setLoading(true)
+    const code = await createUser({ name, email, password })
+
+    if (code === 201) {
+      setLoading(false)
+      setName("")
+      setEmail("")
+      setPassword("")
+      setConfirmPassword("")
+      setHash("")
+      setCode("")
+      setLoading(false)
+
+      navigate("/login")
+      return
+    }
+
+    if (code === 401) {
+      setInfo("Esse e-mail já foi cadastrado")
+      setLoading(false)
+      return
+    }
+
+
+    setInfo(`Error ${code}`)
+    setLoading(false)
+    return
+  }
+
+  const resendCode = async () => {
+    if (!name || !email) {
+      setInfo("Error ao reenviar código")
+      return
+    }
+
+    setInfo("⠀")
+
+    setLoadingResendCode(true)
+    const [code, response] = await CodeConfirmation({ name, email })
+
+    if (code === 200) {
+      setInfo("Código reenviado")
+      setHash(response.code)
+      setLoadingResendCode(false)
+      return
+    }
+
+    setInfo(`Erro ao reenviar código`)
+    setLoadingResendCode(false)
+    return
+  }
+
+  const registerAccount = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if(loading) {
+      return
+    }
+
+    if (!name || !email || !password || !code || !hash) {
+      return
+    }
+
+    setLoading(true)
+    const status = await confirmCode({ code, hash})
+
+    if (status === 401) {
+      setInfo("Código errado")
+      setLoading(false)
+      return
+    }
+
+    if (status !== 200) {
+      setInfo(`${status} - Error ao confirmar o código`)
+      setLoading(false)
+      return
+    }
+
+
+    const statusCode = await createUser({ name, email, password })
+
+    if (statusCode === 201) {
+      setLoading(false)
+      setName("")
+      setEmail("")
+      setPassword("")
+      setConfirmPassword("")
+      setHash("")
+      setCode("")
+      setLoading(false)
+
+      navigate("/login")
+      return
+    }
+
+    if (statusCode === 401) {
+      setInfo("Esse e-mail já foi cadastrado")
+      setLoading(false)
+      return
+    }
+
+
+    setInfo(`Error ${code}`)
+    setLoading(false)
+    return
   }
 
   return (

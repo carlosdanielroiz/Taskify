@@ -1,4 +1,5 @@
 import axios, {AxiosRequestConfig} from 'axios'
+import { UserInterface } from '../interface/interfaces'
 
 const baseURL: string | undefined = process.env.REACT_APP_API_BASE_URL
 const secret: string | undefined = process.env.REACT_APP_API_SECRET || "secret"
@@ -54,4 +55,26 @@ export async function CodeConfirmation(data: {email: string, name: string }): Pr
     return responseData
   }
   return [500, { error: "Internal server error"}];
+}
+
+export async function confirmCode(data: { code: string, hash: string }) {
+  if(config !== undefined) {
+    const responseData = await axios.post(`${baseURL}/confirm_code`, data, config)
+      .then(response => response.status)
+      .catch(error => error.response.status)
+
+    return responseData
+  }
+}
+
+// ================================= USER =================================
+
+export async function createUser(data: UserInterface) {
+  if(config !== undefined) {
+    const responseData = await axios.post(`${baseURL}/users`, data, config)
+      .then(response => response.status)
+      .catch(error => error.response.status)
+
+    return responseData
+  }
 }
