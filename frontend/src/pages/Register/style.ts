@@ -25,6 +25,20 @@ export const Form = styled.form`
   flex-direction: column;
   align-items: center;
   overflow-y: auto;
+  position: relative;
+
+  svg.back {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+
+    path{
+      stroke: ${theme.colors.gray400};
+    }
+  }
 
   &::-webkit-scrollbar {
     width: 4px;
