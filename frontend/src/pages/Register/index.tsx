@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Content, Field, Form } from './style'
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
@@ -9,16 +9,21 @@ import { ReactComponent as EyeSlashIcon } from '../../assets/icons/eye-slash.svg
 import { ReactComponent as ArrowIcon } from '../../assets/icons/arrow-left.svg';
 import logo from "../../assets/images/logo.png"
 import { useNavigate } from 'react-router-dom';
-import { CodeConfirmation, confirmCode, createUser } from '../../services/api';
+import { CodeConfirmation, confirmCode, createUser, register } from '../../services/api';
+import { UserContext } from '../../context/UserContext';
+import Loading from '../../components/Loading';
 
 function Register() {
 
   const navigate = useNavigate()
 
+  const { loadingLogin } = useContext(UserContext)
+
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
   const [confirmPassword, setConfirmPassword] = useState<string>("")
-  const [name, setName] = useState<string>("")
+  const [firstName, setFirstName] = useState<string>("")
+  const [lastName, setLastName] = useState<string>("")
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [code, setCode] = useState<string>("")
@@ -29,14 +34,14 @@ function Register() {
   const [loadingResendCode, setLoadingResendCode] = useState<boolean>(false)
 
 
-  const signIn = async (event: React.FormEvent<HTMLFormElement>) => {
+  const signUp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
     if(loading) {
       return
     }
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (!firstName || !email || !password || !confirmPassword) {
       setInfo("Preencha todos os campos")
       return
     } 
@@ -60,36 +65,32 @@ function Register() {
     setInfo("⠀")
 
     setLoading(true)
-    const code = await createUser({ name, email, password })
+    const status = await register({ email });
+    if (status === 200) {
+      const [codeStatus, response] = await CodeConfirmation({ name: firstName, email })
+      if (codeStatus === 200) {
+        setHash(response.code)
+        setLoading(false)
+        return
+      }
 
-    if (code === 201) {
-      setLoading(false)
-      setName("")
-      setEmail("")
-      setPassword("")
-      setConfirmPassword("")
-      setHash("")
-      setCode("")
-      setLoading(false)
-
-      navigate("/login")
-      return
-    }
-
-    if (code === 401) {
-      setInfo("Esse e-mail já foi cadastrado")
+      setInfo(`${codeStatus} - Error`)
       setLoading(false)
       return
     }
 
+    if (status === 401) {
+      setInfo("Esse email já está registrado")
+      setLoading(false)
+      return
+    }
 
-    setInfo(`Error ${code}`)
+    setInfo(`${status} - Error ao registrar conta`)
     setLoading(false)
-    return
   }
 
   const resendCode = async () => {
-    if (!name || !email) {
+    if (!firstName || !email) {
       setInfo("Error ao reenviar código")
       return
     }
@@ -97,7 +98,7 @@ function Register() {
     setInfo("⠀")
 
     setLoadingResendCode(true)
-    const [code, response] = await CodeConfirmation({ name, email })
+    const [code, response] = await CodeConfirmation({ name: firstName, email })
 
     if (code === 200) {
       setInfo("Código reenviado")
@@ -118,7 +119,7 @@ function Register() {
       return
     }
 
-    if (!name || !email || !password || !code || !hash) {
+    if (!firstName || !email || !password || !code || !hash) {
       return
     }
 
@@ -138,11 +139,11 @@ function Register() {
     }
 
 
-    const statusCode = await createUser({ name, email, password })
+    const statusCode = await createUser({ first_name: firstName, last_name: lastName, email, password })
 
     if (statusCode === 201) {
       setLoading(false)
-      setName("")
+      setFirstName("")
       setEmail("")
       setPassword("")
       setConfirmPassword("")
@@ -161,9 +162,15 @@ function Register() {
     }
 
 
-    setInfo(`Error ${code}`)
+    setInfo(`Error ${statusCode}`)
     setLoading(false)
     return
+  }
+
+  if (loadingLogin) {
+    return (
+      <Loading />
+    )
   }
 
   return (
@@ -172,10 +179,11 @@ function Register() {
       {
         !hash ? 
         (
-          <Form onSubmit={(event) => signIn(event)}>
+          <Form onSubmit={(event) => signUp(event)}>
             <img src={logo} alt="" />
             <h1>Seja bem-vindo(a)</h1>
             <span>Por favor insira seus dados para realizar se registrar no site</span>
+            <h4>{info}</h4>
             <div className="social-media">
               <div className="op">
                 <FaFacebook color='#29487d ' />
@@ -198,7 +206,15 @@ function Register() {
               <label htmlFor="name">Nome</label>
               
               <div className="input-and-icon">
-                <input value={name} type="text" id='name' name='name' placeholder='Nome' onChange={(event) => setName(event.target.value)} />
+                <input value={firstName} type="text" id='first-name' name='first-name' placeholder='Nome' onChange={(event) => setFirstName(event.target.value)} required />
+              </div>
+            </Field>
+
+            <Field  style={{ marginTop: "12px"}}>
+              <label htmlFor="name">Sobrenome</label>
+              
+              <div className="input-and-icon">
+                <input value={lastName} type="text" id='last-name' name='last-name' placeholder='Sobrenome' onChange={(event) => setLastName(event.target.value)} />
               </div>
             </Field>
 
@@ -214,7 +230,7 @@ function Register() {
               <label htmlFor="password">Senha</label>
               
               <div className="input-and-icon">
-                <input type={ showPassword ? "text" : "password"} id='password' name='password' placeholder='Senha' onChange={(event) => setPassword(event.target.value)} />
+                <input type={ showPassword ? "text" : "password"} id='password' name='password' placeholder='Senha' onChange={(event) => setPassword(event.target.value)} required />
                 
                 { showPassword ? <EyeSlashIcon onClick={() => setShowPassword(false)} /> : <EyeIcon onClick={() => setShowPassword(true)} />}
               </div>
@@ -224,7 +240,7 @@ function Register() {
               <label htmlFor="confirm-password">Confirma senha</label>
               
               <div className="input-and-icon">
-                <input type={ showConfirmPassword ? "text" : "password"} id='confirm-password' name='confirm-password' placeholder='Confirmar senha' onChange={(event) => setConfirmPassword(event.target.value)} />
+                <input type={ showConfirmPassword ? "text" : "password"} id='confirm-password' name='confirm-password' placeholder='Confirmar senha' onChange={(event) => setConfirmPassword(event.target.value)} required />
                 
                 { showConfirmPassword ? <EyeSlashIcon onClick={() => setShowConfirmPassword(false)} /> : <EyeIcon onClick={() => setShowConfirmPassword(true)} />}
               </div>
@@ -239,17 +255,17 @@ function Register() {
         ) 
         :
         (
-          <Form onSubmit={(event) => signIn(event)}>
+          <Form onSubmit={(event) => registerAccount(event)}>
             <ArrowIcon className='back' onClick={() => setHash("")} />
             <img src={logo} alt="" />
             <h1>Código de Confirmação</h1>
             <span>Enviamos um código de confirmação para o e-mail {email}. Por favor insira ele abaixo</span>
-
+            <h4>{info}</h4>
             <Field  style={{ marginTop: "12px"}}>
               <label htmlFor="code">Código</label>
               
               <div className="input-and-icon">
-                <input value={code} defaultValue={code} max={6} maxLength={6} type="text" id='code' name='code' placeholder='Código' onChange={(event) => setCode(event.target.value)} />
+                <input value={code} defaultValue={code} max={6} maxLength={6} type="text" id='code' name='code' placeholder='Código' onChange={(event) => setCode(event.target.value)} required />
               </div>
             </Field>
 

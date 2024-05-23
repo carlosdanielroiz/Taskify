@@ -72,7 +72,7 @@ export const Container = styled.aside`
       div.text{
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: 4px;
 
         div.name-and-verify{
           display: flex;

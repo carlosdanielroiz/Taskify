@@ -64,6 +64,14 @@ export const Form = styled.form`
     }
   }
 
+  h4{
+    font-size: 16px;
+    font-weight: 600;
+    color: ${theme.colors.red};
+    margin: 0;
+    text-align: center;
+  }
+
   div.social-media{
     display: flex;
     width: 100%;

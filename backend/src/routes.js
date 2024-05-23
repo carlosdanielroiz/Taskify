@@ -3,12 +3,14 @@ import { Router } from "express";
 import user from "./app/controllers/UserController"
 import mail from "./app/controllers/SendMailController"
 import register from "./app/controllers/RegisterController"
+import login from "./app/controllers/LoginController"
 import code from "./app/controllers/ConfirmCodeController"
 
 const routes = new Router();
 
-// Send mail
+// Login and register
 routes.post("/register", register.create);
+routes.post("/login", login.create);
 
 // Users
 routes.get("/users", user.index);

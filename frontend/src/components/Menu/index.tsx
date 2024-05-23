@@ -14,7 +14,7 @@ import { UserContext } from '../../context/UserContext'
 
 function Menu() {
 
-  const { logout } = useContext(UserContext)
+  const { logout, user } = useContext(UserContext)
 
   return (
     <Container>
@@ -70,13 +70,13 @@ function Menu() {
         </Logout>
 
         <a href="" className="user">
-          <img src={avatar} alt="" />
+          <img src={user?.picture ? user?.picture : avatar} alt="" />
           <div className="text">
             <div className="name-and-verify">
-              <h4>Nome</h4>
+              <h4>{user?.first_name}</h4>
               <VerifyIcon />
             </div>
-            <span>nome@email.com</span>
+            <span>{user?.email}</span>
           </div>
 
           <ArrowIcon className='arrow' />
