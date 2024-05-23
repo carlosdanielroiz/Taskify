@@ -56,7 +56,15 @@ class UserController {
       return res.status(400).json({ error: "Error on validate schema!"});
     }
 
-    const { first_name, last_name, tel, email, id, createdAt, updatedAt, linkedin, picture } = await User.create(req.body);
+    const { email } = req.body
+
+    const findUser = await User.findOne({ where: { email }})
+
+    if (findUser) {
+      return res.status(401).json({ error: "This e-mail has been signed up already"})
+    }
+
+    const { first_name, last_name, tel, id, createdAt, updatedAt, linkedin, picture } = await User.create(req.body);
 
     return res.status(201).json({ 
       first_name, 
