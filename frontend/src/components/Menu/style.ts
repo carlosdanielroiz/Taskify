@@ -13,6 +13,37 @@ export const Container = styled.aside`
   position: relative;
   align-items: center;
   border-right: 1px solid ${theme.colors.gray100};
+
+  &.desactive{
+    width: calc(72px - 36px);
+    min-width: calc(72px - 36px);
+    
+    a, div{
+      gap: 0;
+      &.active{
+        background-color: transparent;
+      }
+      span, svg.arrow{
+        display: none;
+      }
+    }
+
+    div.logo{
+      span{
+        display: none;
+      }
+    }
+
+    nav {
+      h5{
+        display: block;
+      }
+    }
+
+    nav.footer a.user div.text{
+      display: none;
+    }
+  }
   
   div.logo{
     width: 100%;
@@ -142,6 +173,18 @@ export const Link = styled(NavLink)`
   position: relative;
   text-decoration: none;
 
+  &::before{
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    background-color: ${theme.colors.primary};
+    position: absolute;
+    left: -34px;
+
+    display: none;
+  }
+
   div.active{
     width: 20px;
     height: 20px;
@@ -195,7 +238,7 @@ export const Link = styled(NavLink)`
   &.active{
     background-color: ${theme.colors.gray50};
 
-    div.active{
+    div.active, &::before{
       display: block;
     }
 

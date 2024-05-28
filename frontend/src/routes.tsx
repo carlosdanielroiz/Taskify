@@ -36,7 +36,7 @@ export function AppRoutes() {
       <Route path='/esqueceu-a-senha' element={<ForgotPassword />} />
 
       <Route path='/' element={<MainPage />}>
-        <Route path='/home' element={<Home />} />
+        <Route path='/' element={<Home />} />
         <Route path='/calendario' element={<Calendar />} />
         <Route path='/configuracoes' element={<Calendar />} />
         <Route path='/mensagens' element={<Messages />} />

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Container, Link, Logout } from './style'
 import logo from "../../assets/images/logo.png"
 import avatar from "../../assets/images/avatar.png"
@@ -11,43 +11,53 @@ import { ReactComponent as MessagesIcon } from '../../assets/icons/messages.svg'
 import { ReactComponent as LogoutIcon } from '../../assets/icons/logout.svg'
 import { ReactComponent as SmsIcon } from '../../assets/icons/sms.svg'
 import { UserContext } from '../../context/UserContext'
+import { useLocation } from 'react-router-dom'
 
 function Menu() {
 
   const { logout, user } = useContext(UserContext)
 
+  const [classMenu, setClassMenu] = useState<string>("")
+
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      setClassMenu("desactive")
+      return
+    }
+
+    setClassMenu("")
+  }, [location])
+
   return (
-    <Container>
+    <Container className={classMenu}>
       <div className="logo">
         <img src={logo} alt="" />
         <span>Taskify</span>
       </div>
 
       <nav>
-        <h5>MAIN</h5>
-        <Link to="/home">
-          <div className="active"></div>
+        <h5>MENU</h5>
+        <Link to="/">
           <DashIcon className='icon' />
           <span>Dashboard</span>
           <ArrowIcon className='arrow' />
         </Link>
 
         <Link to="/calendario">
-          <div className="active"></div>
           <CalendarIcon className='icon-2' />
           <span>Calendário</span>
           <ArrowIcon className='arrow' />
         </Link>
 
         <Link to="/mensagens">
-          <div className="active"></div>
           <MessagesIcon className='icon-2' />
           <span>Mensagens</span>
           <ArrowIcon className='arrow' />
         </Link>
 
         <Link to="/convites">
-          <div className="active"></div>
           <SmsIcon className='icon-2' />
           <span>Convites</span>
           <ArrowIcon className='arrow' />
@@ -56,14 +66,12 @@ function Menu() {
 
       <nav className="footer">
         <Link to="/configuracoes">
-          <div className="active"></div>
           <SettingIcon className='icon-2' />
           <span>Confirgurações</span>
           <ArrowIcon className='arrow' />
         </Link>
 
         <Logout onClick={() => logout()}>
-          <div className="active"></div>
           <LogoutIcon className='icon' />
           <span>Sair</span>
           <ArrowIcon className='arrow' />
